@@ -1,0 +1,47 @@
+* yaml-path
+
+Shows you your location in a YAML file in Emacs using =eldoc= and/or
+=which-function-mode=.
+
+A friendly fork whose primary purpose in life is to make YAML editing in emacs
+slightly better and eventually become part of upstream =yaml-path=.
+
+This fork does not want to live alone!
+
+Changes from upstream:
+
+1. Enable autoloading
+2. Support =eldoc=
+3. Support =which-function-mode=
+
+* Getting Started
+
+** Doom Emacs
+
+#+begin_src elisp
+;; packages.el
+(package! yaml-path)
+
+;; config.el
+(use-package! yaml-path
+  :if (featurep! :lang data)
+  :defer t
+  :init
+  (setq yaml-path-maximum-file-size 500000) ; default is 1MB
+  (map! :after yaml-mode
+        :map yaml-mode-map
+        :localleader
+        (:prefix-map ("p" . "Path")
+          "p" #'yaml-path/path
+          "r" #'yaml-path/display-ruby-expression))
+
+  (add-hook! yaml-mode
+             ;; for eldoc
+             (yaml-path/enable-path-in-eldoc-maybe)
+             ;; for which-function-mode
+             (yaml-path/enable-path-in-modeline-maybe)))
+#+END_SRC
+
+** Vanilla emacs and Spacemacs
+
+Adapt accordingly.
